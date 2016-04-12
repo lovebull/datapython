@@ -2,6 +2,15 @@
 # -*- coding: utf-8 -*-
 
 
+# Script Name   : hospital.py
+# Author        : lovebull
+# Created       : 2016/04/12
+# Last Modified : 2016/04/12
+# Version       : 1.0.0
+# Modifications : Added exceptions
+#
+# Description   :
+
 from urllib import  request
 #from io import  StringIO
 #import  gzip
@@ -49,27 +58,6 @@ for key in yy:
     tt=key.find_previous_siblings("p")
     for keys in tt:
         print(keys.get_text())
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#print( f.read().decode('gbk').encode('utf-8').decode('utf-8'))
-
-# if f.info().get('Content-Encoding') == 'gzip':
-#     buf = StringIO(f.read().decode('utf-8'))
-#     f = gzip.GzipFile(fileobj=buf)
-#     data = f.read()
 
 
 
