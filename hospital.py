@@ -134,4 +134,7 @@ for key_img in img_url:
     print(key_img.get('src'))
 
 
-
+#获取分页URL 下一页地址
+page_url=html.find('div','next').find("a")
+page_url_next="http://yyk.39.net"+page_url.get('href')
+print(page_url_next)
