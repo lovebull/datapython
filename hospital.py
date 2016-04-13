@@ -138,3 +138,7 @@ for key_img in img_url:
 page_url=html.find('div','next').find("a")
 page_url_next="http://yyk.39.net"+page_url.get('href')
 print(page_url_next)
+
+
+
+#获取全部医院数据
