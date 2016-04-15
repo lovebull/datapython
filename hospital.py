@@ -19,28 +19,32 @@ import uuid
 
 
 
-# website url
-req=request.Request('')
+#生产出html
+def GetHtml(url):
+    req = request.Request(url)
+    req.add_header('User-Agent',
+               'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.112 Safari/537.36')
 
-req.add_header('User-Agent','Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.112 Safari/537.36')
-# print(11)
-# time.sleep(1)
-# print(22)
-f=request.urlopen(req)
-data=f.read().decode('gbk')
+    f = request.urlopen(req)
+    data = f.read().decode('gbk')
 
-soup = BeautifulSoup(data,'lxml')
+    soup = BeautifulSoup(data, 'lxml')
 
-html=soup.find("div","serach-left-list")#.find("li")
-#htmltwo=html.find_all("li")
+    html = soup.find("div", "serach-left-list")
+    return html
+
+
 
 #获取医院名称
-yy_name=html.find_all("a","yy-name")
-i=0
-for key in yy_name:
-    i=i+1
+def GetHospitalName(html):
+    yy_name=html.find_all("a","yy-name")
+    #i=0
+    for key in yy_name:
+        #i=i+1
+        print("医院名称=",key.get_text())
+    return key.get_text()
+        #print("%d= %s" %(i,key.get_text()))
 
-    print("%d= %s" %(i,key.get_text()))
 
 
 #def has_class_but_no_id_and_class(tag):
@@ -55,31 +59,33 @@ def has_noclass_intag_p():
 
 
 
+
+
 #获取地址
+def GetHospitalAddress(html):
+    address=html.find_all("p","di")
+    for key_address in address:
+        kk=key_address.find_all("a")
+        for key_add in kk:
+            print("医院地址=",key_add.get_text())
+            #print("%d=%s" %(aa, key_add.get_text()))
+    return key_add.get_text()
 
-address=html.find_all("p","di")
-aa=0
-for key_address in address:
-    kk=key_address.find_all("a")
-
-    for key_add in kk:
-        aa=aa+1
-
-        print("%d=%s" %(aa, key_add.get_text()))
 
 
 print("-----------------ttttttt-------------------")
 #获取 三级甲等/ 心血管病医院 / 医保定点
 #增加 去除获得文本内容的前后空白strip=True
-yy=html.find_all("p","di")
-cc=0
-for key in yy:
-    tt=key.find_previous_siblings("p")
-    for keys in tt:
-        cc=cc+1
-        print("%d=%s" %(cc,keys.get_text(strip=True)))
 
-
+def GetHospitalRank(html):
+    yy=html.find_all("p","di")
+    for key in yy:
+        tt=key.find_previous_siblings("p")
+        for keys in tt:
+            print("医院等级=",keys.get_text(strip=True))
+            #cc=cc+1
+            #print("%d=%s" %(cc,keys.get_text(strip=True)))
+    return keys.get_text(strip=True)
 
 
 
@@ -126,19 +132,42 @@ def save_file(path, file_name, data):
 def unique_str():
     return str(uuid.uuid1())
 
+
+
 #获取医院图片地址并且下载到本地
-img_url=html.find_all("img","yy-img")
-for key_img in img_url:
-    url_yyimg=key_img.get('src')
-    save_file("E:/Python/datapython/img", unique_str()+".jpg", get_file(url_yyimg))
-    print(key_img.get('src'))
+def GetDownImage(html):
+    img_url=html.find_all("img","yy-img")
+    for key_img in img_url:
+        url_yyimg=key_img.get('src')
+        save_file("E:/Python/datapython/img", unique_str()+".jpg", get_file(url_yyimg))
+        print(key_img.get('src'))
+
 
 
 #获取分页URL 下一页地址
-page_url=html.find('div','next').find("a")
-page_url_next="http://yyk.39.net"+page_url.get('href')
-print(page_url_next)
+def GetNextPage(html):
+    page_url=html.find('div','next').find("a")
+    page_url_next="http://yyk.39.net"+page_url.get('href')
+    print(page_url_next)
+    return page_url_next
 
 
 
+
+url=""
+html=GetHtml(url)
+yy_name=GetHospitalName(html)
+yy_address=GetHospitalAddress(html)
+yy_rank=GetHospitalRank(html)
+
+print(yy_name,"=",yy_address,"=",yy_rank)
 #获取全部医院数据
+# for key in range(1,5):
+#     html=GetHtml(url)
+#     yy_name=GetHospitalName(html)
+#     yy_address=GetHospitalAddress(html)
+#     yy_rank=GetHospitalRank(html)
+#
+#     print(yy_name,"=",yy_address,"=",yy_rank)
+
+
