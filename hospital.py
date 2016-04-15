@@ -39,10 +39,16 @@ def GetHtml(url):
 def GetHospitalName(html):
     yy_name=html.find_all("a","yy-name")
     #i=0
+    #print(yy_name)
+    nameList=[]
     for key in yy_name:
         #i=i+1
-        print("医院名称=",key.get_text())
-    return key.get_text()
+        #print("医院名称=",key.get_text())
+        nameList.append(key.get_text())
+    return nameList
+    #return key.get_text()
+
+
         #print("%d= %s" %(i,key.get_text()))
 
 
@@ -64,12 +70,16 @@ def has_noclass_intag_p():
 #获取地址
 def GetHospitalAddress(html):
     address=html.find_all("p","di")
+
+    addressList=[]
     for key_address in address:
         kk=key_address.find_all("a")
         for key_add in kk:
-            print("医院地址=",key_add.get_text())
+            #print("医院地址=",key_add.get_text())
+            addressList.append(key_add.get_text())
             #print("%d=%s" %(aa, key_add.get_text()))
-    return key_add.get_text()
+    return addressList
+    #return key_add.get_text()
 
 
 
@@ -79,13 +89,16 @@ print("-----------------ttttttt-------------------")
 
 def GetHospitalRank(html):
     yy=html.find_all("p","di")
+    rankList=[]
     for key in yy:
         tt=key.find_previous_siblings("p")
         for keys in tt:
-            print("医院等级=",keys.get_text(strip=True))
+            #print("医院等级=",keys.get_text(strip=True))
+            rankList.append(keys.get_text(strip=True))
             #cc=cc+1
             #print("%d=%s" %(cc,keys.get_text(strip=True)))
-    return keys.get_text(strip=True)
+    return rankList
+    #return keys.get_text(strip=True)
 
 
 
@@ -155,19 +168,39 @@ def GetNextPage(html):
 
 
 url=""
-html=GetHtml(url)
-yy_name=GetHospitalName(html)
-yy_address=GetHospitalAddress(html)
-yy_rank=GetHospitalRank(html)
+# html=GetHtml(url)
+# yy_name=GetHospitalName(html)
+# yy_address=GetHospitalAddress(html)
+# yy_rank=GetHospitalRank(html)
+# print(yy_name)
+# print(yy_address)
+# print(yy_rank)
 
-print(yy_name,"=",yy_address,"=",yy_rank)
-#获取全部医院数据
-# for key in range(1,5):
-#     html=GetHtml(url)
-#     yy_name=GetHospitalName(html)
-#     yy_address=GetHospitalAddress(html)
-#     yy_rank=GetHospitalRank(html)
-#
-#     print(yy_name,"=",yy_address,"=",yy_rank)
+
+
+#print(yy_name,"=",yy_address,"=",yy_rank)
+
+#计算脚本运行时间
+start_time=time.time()
+
+#获取全部医院数据 分页内容数据
+for key in range(1,3):
+    url2=url+'c_p'+str(key)
+
+    print(url2)
+    html=GetHtml(url2)
+
+    yy_name=GetHospitalName(html)
+    yy_address=GetHospitalAddress(html)
+    yy_rank=GetHospitalRank(html)
+    GetDownImage(html)
+    print(yy_name)
+    print(yy_address)
+    print(yy_rank)
+
+
+end_time=time.time()
+
+print('运行时间=',end_time-start_time)
 
 
