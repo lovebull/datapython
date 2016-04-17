@@ -214,8 +214,7 @@ if __name__=='__main__':
     db_connect=pymysql.connect(host="localhost",user="root",passwd="root",database="core",port=3306,charset="utf8")
     cur=db_connect.cursor()
 
-    url=""
-
+    url="http://yyk.39.net/beijing/hospitals/"
 
     #计算脚本运行时间
     start_time=time.time()
@@ -226,7 +225,10 @@ if __name__=='__main__':
         print('1=',url2)
         GetHtmlForPage(url2)
 
-
+        # pool=ThreadPool(4)
+        # pool.map()
+        # pool.close()
+        # pool.join()
 
         #取得数据添加进数据库
         #sql="""INSERT INTO oc_cms_hospitaldata(yy_name,
@@ -241,10 +243,7 @@ if __name__=='__main__':
         #except:
         #    db_connect.rollback()
 
-        # pool=ThreadPool(4)
-        # pool.map()
-        # pool.close()
-        # pool.join()
+
 
     #cur.close()
     #db_connect.close()
