@@ -20,6 +20,7 @@ import pymysql
 from multiprocessing.dummy import Pool as ThreadPool
 
 
+
 #生产出html
 def GetHtml(url):
     req = request.Request(url)
@@ -142,10 +143,8 @@ def save_file(path, file_name, data):
 def unique_str():
     return str(uuid.uuid1())
 
-
-
 #获取医院图片地址并且下载到本地
-def GetDownImage(html):
+def GetDownImage_old(html):
     img_url=html.find_all("img","yy-img")
 
     for key_img in img_url:
@@ -155,7 +154,11 @@ def GetDownImage(html):
         print(key_img.get('src'))
     return picture_name
 
+<<<<<<< HEAD
 def GetDownImage_ceshi(url):
+=======
+def GetDownImage(url):
+>>>>>>> dev_thread_branch
     picture_name=os.path.basename(url)
     save_file("E:/Python/datapython/img", picture_name, get_file(url))
 
@@ -206,7 +209,11 @@ def GetHtmlForPage(url):
 
          cur.close()
          db_connect.close()
+<<<<<<< HEAD
          GetDownImage_ceshi(yy_imgurl)
+=======
+         GetDownImage(yy_imgurl)
+>>>>>>> dev_thread_branch
 
 
 if __name__=='__main__':
@@ -214,14 +221,19 @@ if __name__=='__main__':
     db_connect=pymysql.connect(host="localhost",user="root",passwd="root",database="core",port=3306,charset="utf8")
     cur=db_connect.cursor()
 
+<<<<<<< HEAD
     url="http://yyk.39.net/beijing/hospitals/"
+=======
+    url=""
+>>>>>>> dev_thread_branch
 
     #计算脚本运行时间
     start_time=time.time()
-
+    url_list=[]
     #获取全部医院数据 分页内容数据
     for key in range(1,3):
         url2=url+'c_p'+str(key)
+<<<<<<< HEAD
         print('1=',url2)
         GetHtmlForPage(url2)
 
@@ -247,6 +259,22 @@ if __name__=='__main__':
 
     #cur.close()
     #db_connect.close()
+=======
+        url_list.append(url2)
+        print(url2)
+
+        #GetHtmlForPage(url2)  #单进程方式
+
+    #增加多进程
+    pool=ThreadPool(4)
+    pool.map(GetHtmlForPage,url_list)
+    pool.close()
+    pool.join()
+
+
+
+
+>>>>>>> dev_thread_branch
     end_time=time.time()
 
     print('运行时间=',end_time-start_time)

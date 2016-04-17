@@ -10,6 +10,12 @@
        * add page contant
     *hospital.py 1.0.2
        *update code
+<<<<<<< HEAD
+=======
+    *hospital.py 1.0.3
+       *update code
+       *add Threading time (Last update:17/04/2016)
+>>>>>>> dev_thread_branch
 
 
 ##采集中国医院数据
@@ -21,6 +27,12 @@
        * 增加对分页内容获取
     *hospital.py 1.0.2
        * 对代码进行优化了
+<<<<<<< HEAD
+=======
+    *hospital.py 1.0.3
+       * 对代码进行了优化
+       * 增加多进程采集 采集时间有明显的提升(最后更新时间：2016/04/17)
+>>>>>>> dev_thread_branch
 
 
 
