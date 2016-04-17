@@ -8,6 +8,8 @@
     *hospital.py 1.0.1
        * To optimize the code and increasing function block
        * add page contant
+    *hospital.py 1.0.2
+       *update code
 
 
 ##采集中国医院数据
@@ -17,6 +19,8 @@
     *hospital.py 1.0.1
        * 对代码进行优化 增加函数块
        * 增加对分页内容获取
+    *hospital.py 1.0.2
+       * 对代码进行优化了
 
 
 
