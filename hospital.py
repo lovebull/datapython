@@ -80,35 +80,6 @@ def GetHospitalAddress(html):
 
 
 
-def GetHospitalAddress_ceshi(html):
-    address=html.find_all("p","di")
-
-    for key_address in address:
-        kk=key_address.find_all("a")
-        for key_add in kk:
-            print(key_add.get_text())
-
-    return key_add.get_text()
-
-
-def GetHospitalName_ceshi(html):
-    yy_name=html.find_all("a","yy-name")
-    for key in range(len(yy_name)):
-        print(yy_name[key].get_text())
-
-    return yy_name[key].get_text()
-        #print(key.get_text())
-
-    #return key.get_text()
-
-
-        #print("%d= %s" %(i,key.get_text()))
-
-
-
-
-
-
 print("-----------------ttttttt-------------------")
 #获取 三级甲等/ 心血管病医院 / 医保定点
 #增加 去除获得文本内容的前后空白strip=True
@@ -184,6 +155,11 @@ def GetDownImage(html):
         print(key_img.get('src'))
     return picture_name
 
+def GetDownImage_ceshi(url):
+    picture_name=os.path.basename(url)
+    save_file("E:/Python/datapython/img", picture_name, get_file(url))
+
+
 
 
 #获取分页URL 下一页地址
@@ -199,7 +175,7 @@ def GetHtmlForPage(url):
 
      html=GetHtml(url)
      yy_list=html.find_all("li")
-     picture_name=GetDownImage(html)
+     #picture_name=GetDownImage(html)
      i=0
      for yy_info in yy_list:
          #print(yy_info)
@@ -209,29 +185,28 @@ def GetHtmlForPage(url):
          yy_address=yy_info.find("p","di").get_text()
 
          yy_rank=yy_info.find("p").get_text(strip=True)
+         yy_imgurl=yy_info.find("img","yy-img").get("src")
+
 
          print(i,'=',yy_name,"=",yy_address,"=",yy_rank)
+         print(yy_imgurl)
+         picture_names=os.path.basename(yy_imgurl)
 
          db_connect=pymysql.connect(host="localhost",user="root",passwd="root",database="core",port=3306,charset="utf8")
          cur=db_connect.cursor()
          sql="INSERT INTO oc_cms_hospitaldata(yy_name,yy_address,yy_rank,yy_image,create_time)VALUES(%s,%s,%s,%s,%s) "
-         param=(yy_name,yy_address,yy_rank,picture_name,int(time.time()))
+         param=(yy_name,yy_address,yy_rank,picture_names,int(time.time()))
          try:
             #cur.execute(sql)
             cur.execute(sql,param)
             print('2=',sql)
             db_connect.commit()
          except:
-
             db_connect.rollback()
+
          cur.close()
          db_connect.close()
-
-     #yy_name=GetHospitalName(html)
-     #yy_address=GetHospitalAddress(html)
-     #yy_rank=GetHospitalRank(html)
-     #GetDownImage(html)
-
+         GetDownImage_ceshi(yy_imgurl)
 
 
 if __name__=='__main__':
@@ -240,15 +215,7 @@ if __name__=='__main__':
     cur=db_connect.cursor()
 
     url=""
-# html=GetHtml(url)
-# yy_name=GetHospitalName(html)
-# yy_address=GetHospitalAddress(html)
-# yy_rank=GetHospitalRank(html)
-# print(yy_name)
-# print(yy_address)
-# print(yy_rank)
 
-#print(yy_name,"=",yy_address,"=",yy_rank)
 
     #计算脚本运行时间
     start_time=time.time()
@@ -259,12 +226,7 @@ if __name__=='__main__':
         print('1=',url2)
         GetHtmlForPage(url2)
 
-        # html=GetHtml(url2)
-        #
-        # yy_name=GetHospitalName(html)
-        # yy_address=GetHospitalAddress(html)
-        # yy_rank=GetHospitalRank(html)
-        #GetDownImage(html)
+
 
         #取得数据添加进数据库
         #sql="""INSERT INTO oc_cms_hospitaldata(yy_name,
@@ -279,23 +241,10 @@ if __name__=='__main__':
         #except:
         #    db_connect.rollback()
 
-
-
-
-
-
         # pool=ThreadPool(4)
         # pool.map()
         # pool.close()
         # pool.join()
-
-        # print(yy_name)
-        # print(yy_address)
-        # print(yy_rank)
-
-
-
-
 
     #cur.close()
     #db_connect.close()
