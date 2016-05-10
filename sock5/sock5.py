@@ -31,8 +31,57 @@ def cur_file_dir():
     elif os.path.isfile(path):
         return os.path.dirname(path)
 
+def get_html(url):
+    req = request.Request(url)
+    req.add_header('User-Agent',
+               'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.112 Safari/537.36')
+    f = request.urlopen(req)
+    data = f.read()#.decode('gbk')
+    f.close()
+    soup = BeautifulSoup(data, 'lxml')
+    html=soup.find(id="free").find(class_="container")
 
-url=''
+    sockcontent=html.find(class_='row').find_next(class_='row')
+
+    allip=sockcontent.find_all('div')
+    return allip
+
+def save_data_text(url):
+    htmldata=get_html(url)
+    f_text=""
+    #sockinfo=[]
+    for info in htmldata:
+    #服务器地址
+        allinfo=info.find_all('h4')
+        allinfo.pop() #删除末尾不需要的元素
+        #print(allinfo)
+        hostip=allinfo[0].get_text()
+        hostport=allinfo[1].get_text()
+        hostpassword=allinfo[2].get_text()
+        hostpass=allinfo[3].get_text()
+        hoststatus=allinfo[4].get_text()
+
+        for i in range(1):
+            file_object = open(cur_file_dir()+'\\'+"sock5代理服务器.txt",'w+')
+            f_text+="{0}\n{1}\n{2}\n{3}\n{4}\n\n".format(hostip,hostport,hostpassword,hostpass,hoststatus)
+            file_object.writelines(f_text)
+            file_object.write('\n')
+            file_object.close()
+
+
+
+
+
+
+if __name__=='__main__':
+   url=' '
+   time.sleep(5)
+   print("采集开始...........")
+   save_data_text(url)
+   print("采集成功..............")
+
+'''''''''''''''''''''''''''''''''
+url='http://www.ishadowsocks.net/'
 req = request.Request(url)
 req.add_header('User-Agent',
                'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.112 Safari/537.36')
@@ -80,7 +129,7 @@ for info in allip:
 
     print('<br/>')
 
-
+'''''''''''''''''''''''''''''''''
 
 
 
